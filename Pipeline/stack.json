@@ -1,11 +1,19 @@
 {
   "Parameters": {
-    "Branch": {
-      "Description": "Branch triggering the deployment",
+    "GitHubBranch": {
+      "Description": "GitHub repository branch",
       "Type": "String"
     },
-    "CodeCommitRepo": {
-      "Description": "Name of the CodeCommit Repository",
+    "GitHubOwner": {
+      "Description": "GitHub repository owner",
+      "Type": "String"
+    },
+    "GitHubRepo": {
+      "Description": "GitHub repository name",
+      "Type": "String"
+    },
+    "GitHubToken": {
+      "Description": "GitHub repository OAuth token",
       "Type": "String"
     }
   },
@@ -190,16 +198,22 @@
               {
                 "ActionTypeId": {
                   "Category": "Source",
-                  "Owner": "AWS",
-                  "Provider": "CodeCommit",
+                  "Owner": "ThirdParty",
+                  "Provider": "GitHub",
                   "Version": "1"
                 },
                 "Configuration": {
-                  "BranchName": {
-                    "Ref": "Branch"
+                  "Branch": {
+                    "Ref": "GitHubBranch"
                   },
-                  "RepositoryName": {
-                    "Ref": "CodeCommitRepo"
+                  "OAuthToken": {
+                    "Ref": "GitHubBranch"
+                  },
+                  "Owner": {
+                    "Ref": "GitHubOwner"
+                  },
+                  "Repo": {
+                    "Ref": "GitHubRepo"
                   }
                 },
                 "Name": {

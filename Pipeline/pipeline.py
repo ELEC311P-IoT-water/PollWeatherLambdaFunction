@@ -4,7 +4,7 @@ from troposphere import Template, Sub, GetAtt, Ref
 from troposphere.s3 import Bucket
 from troposphere.codepipeline import Pipeline, ArtifactStore
 from awslambdacontinuousdelivery.tools.iam import createCodepipelineRole
-from awslambdacontinuousdelivery.source.codecommit import getCodeCommit
+from awslambdacontinuousdelivery.source.github import getGitHub
 from awslambdacontinuousdelivery.python.test.unittest import getUnittest
 from awslambdacontinuousdelivery.python.build import getBuild
 from awslambdacontinuousdelivery.deploy import getDeploy
@@ -30,7 +30,7 @@ s3 = template.add_resource(
 
 pipeline_role = template.add_resource(
   createCodepipelineRole("PipelineRole"))
-source = getCodeCommit(template, source_code)
+source = getGitHub(template, source_code)
 pipeline_stages.append(source)
 
 unit_tests = getUnittest(template, source_code)
