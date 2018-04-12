@@ -23,5 +23,5 @@ def get_iam(ref_name: str) -> Role:
   return Role( ref_name
              , RoleName = ref_name
              , AssumeRolePolicyDocument = assume
-             , Policies = [oneClickCreateLogsPolicy(), get_secret_manger()]
+             , Policies = [oneClickCreateLogsPolicy(), get_secret_manager()]
              )
