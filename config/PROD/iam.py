@@ -7,7 +7,7 @@ from troposphere.iam import Role
 from awacs.aws import Action, Allow, Policy, Statement
 
 
-def get_secret_manager(arn: str) -> Policy:
+def get_secret_manager() -> Policy:
   return Policy(
     Statement = [
       Statement(
