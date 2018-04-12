@@ -3,20 +3,23 @@ from awslambdacontinuousdelivery.tools.iam import (
   , oneClickCreateLogsPolicy
   )
 
-from troposphere.iam import Role
-from awacs.aws import Action, Allow, Policy, Statement
-
+from troposphere import Sub
+from troposphere.iam import Role, Policy
+from awacs.aws import Action, Allow, Statement
+import awacs.aws
 
 def get_secret_manager() -> Policy:
-  return Policy(
-    Statement = [
-      Statement(
-        Effect = Allow,
-        Action = [ Action("secretsmanager:GetSecretValue") ],
-        Resource = [ "arn:aws:secretsmanager:::secret/iot/prod*" ],
-      ),
-    ],
-  )
+  statements = [
+    Statement(
+      Action = [ Action("secretsmanager:GetSecretValue") ],
+      Effect = Allow,
+      Resource = [ "arn:aws:secretsmanager:::secret/iot/prod*" ]
+    )
+  ]
+  policyDoc = awacs.aws.Policy( Statement = statements )
+  return Policy( PolicyName = Sub("SecretManagerAccess-${AWS::StackName}")
+               , PolicyDocument = policyDoc
+               )
 
 def get_iam(ref_name: str) -> Role:
   assume = defaultAssumeRolePolicyDocument("lambda.amazonaws.com")
@@ -25,3 +28,7 @@ def get_iam(ref_name: str) -> Role:
              , AssumeRolePolicyDocument = assume
              , Policies = [oneClickCreateLogsPolicy(), get_secret_manager()]
              )
+
+if __name__ == "__main__":
+  print("For Testing only")
+  print(get_iam("Test"))
