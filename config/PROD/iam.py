@@ -12,7 +12,7 @@ def get_secret_manager(arn: str) -> Policy:
     Statement = [
       Statement(
         Effect = Allow,
-        Action = [ Action("secretsmanager:GetSecretValue") ]
+        Action = [ Action("secretsmanager:GetSecretValue") ],
         Resource = [ "arn:aws:secretsmanager:::secret/iot/prod*" ],
       ),
     ],
