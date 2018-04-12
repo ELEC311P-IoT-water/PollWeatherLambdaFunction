@@ -35,10 +35,11 @@ def get_apikey() -> str:
         # Depending on whether the secret was a string or binary,
         # one of these fields will be populated
         if 'SecretString' in get_secret_value_response:
-            secret = get_secret_value_response['SecretString']
+            return get_secret_value_response['SecretString']
+            
         else:
             binary_secret_data = get_secret_value_response['SecretBinary']
-        return secret
+    
 
 
 def lambda_handler(event, context):
