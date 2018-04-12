@@ -1,2 +1,2 @@
 Name: IoTPollWeather
-Handler: function.handler
+Handler: function.lambda_handler
