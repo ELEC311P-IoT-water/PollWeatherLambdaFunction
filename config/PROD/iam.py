@@ -12,7 +12,7 @@ def get_secret_manager() -> Policy:
     awacs.aws.Statement(
       Action = [ awacs.aws.Action("secretsmanager", "GetSecretValue") ],
       Effect = awacs.aws.Allow,
-      Resource = [ "arn:aws:secretsmanager:::iot/prod*" ]
+      Resource = [ "arn:aws:secretsmanager:*:*:secret:iot/prod*" ]
     )
   ]
   policyDoc = awacs.aws.Policy( Statement = statements )
