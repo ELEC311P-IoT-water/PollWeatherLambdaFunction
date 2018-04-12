@@ -33,8 +33,8 @@ pipeline_role = template.add_resource(
 source = getGitHub(template, source_code)
 pipeline_stages.append(source)
 
-unit_tests = getUnittest(template, source_code)
-pipeline_stages.append(unit_tests)
+#unit_tests = getUnittest(template, source_code)
+#pipeline_stages.append(unit_tests)
 
 build_stage = getBuild(
   template, source_code, deploy_pkg_artifact, cf_artifact, stages)
