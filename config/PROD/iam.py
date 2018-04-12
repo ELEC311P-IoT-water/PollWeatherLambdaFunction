@@ -5,15 +5,14 @@ from awslambdacontinuousdelivery.tools.iam import (
 
 from troposphere import Sub
 from troposphere.iam import Role, Policy
-from awacs.aws import Action, Allow, Statement
 import awacs.aws
 
 def get_secret_manager() -> Policy:
   statements = [
-    Statement(
-      Action = [ Action("secretsmanager:GetSecretValue") ],
-      Effect = Allow,
-      Resource = [ "arn:aws:secretsmanager:::secret/iot/prod*" ]
+    awacs.aws.Statement(
+      Action = [ awacs.aws.Action("secretsmanager", "GetSecretValue") ],
+      Effect = awacs.aws.Allow,
+      Resource = ["*"]
     )
   ]
   policyDoc = awacs.aws.Policy( Statement = statements )
@@ -31,4 +30,7 @@ def get_iam(ref_name: str) -> Role:
 
 if __name__ == "__main__":
   print("For Testing only")
-  print(get_iam("Test"))
+  secret = get_secret_manager()
+  print(str(secret.to_dict()))
+  role = get_iam("Test")
+  print(str(role.to_dict()))
