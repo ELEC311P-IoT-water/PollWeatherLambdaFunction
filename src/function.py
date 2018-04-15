@@ -3,6 +3,7 @@ import os
 from typing import List, Dict
 import boto3
 from botocore.exceptions import ClientError
+import json
 
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
@@ -41,6 +42,10 @@ def get_apikey() -> str:
             binary_secret_data = get_secret_value_response['SecretBinary']
             return str(binary_secret_data)
     raise Exception("Couldn't get Secret Value")
+
+def convertToDict(string: str) -> dict:
+    return json.loads(string)
+
 
 
 def lambda_handler(event, context):

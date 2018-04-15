@@ -1,2 +1,4 @@
 Name: IoTPollWeather
 Handler: function.lambda_handler
+Unittests:
+  Folder: test/unittest/

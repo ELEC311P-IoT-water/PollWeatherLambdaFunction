@@ -20,7 +20,7 @@ source_code = "SourceCode"
 deploy_pkg_artifact = "FunctionDeployPackage"
 cf_artifact = "CfOutputTemplate"
 pipeline_stages = [] # list holding all stages, order matters!
-stages = []
+stages = ["Gamma"]
 
 s3 = template.add_resource(
   Bucket("ArtifactStoreS3Location"
@@ -33,18 +33,15 @@ pipeline_role = template.add_resource(
 source = getGitHub(template, source_code)
 pipeline_stages.append(source)
 
-#unit_tests = getUnittest(template, source_code)
-#pipeline_stages.append(unit_tests)
+unit_tests = getUnittest(template, source_code)
+pipeline_stages.append(unit_tests)
 
 build_stage = getBuild(
   template, source_code, deploy_pkg_artifact, cf_artifact, stages)
 pipeline_stages.append(build_stage)
 
 for s in stages:
-  pipeline_stages.append(
-    getDeploy( template, cf_artifact, s.capitalize()
-               , deploy_pkg_artifact, source_code, getTest)
-  )
+  pipeline_stages.append(getDeploy( template, cf_artifact, s.capitalize(), deploy_pkg_artifact))
 
 PROD = getDeploy(template, cf_artifact, "PROD", deploy_pkg_artifact)
 
