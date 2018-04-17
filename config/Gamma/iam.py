@@ -14,8 +14,7 @@ def get_s3_access() -> Policy:
     awacs.aws.Statement(
       Action = [ s3.PutObject ],
       Effect = awacs.aws.Allow,
-      Resource = [
-        Sub("arn:aws:s3:${AWS::Region}:${AccountId}:iotweatherdata-gamma*") ]
+      Resource = [ "arn:aws:s3:::iotweatherdata-gamma/*" ]
     )
   ]
   policyDoc = awacs.aws.Policy( Statement = statements )
