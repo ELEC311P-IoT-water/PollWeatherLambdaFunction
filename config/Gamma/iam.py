@@ -21,7 +21,7 @@ def get_s3_access() -> Policy:
   return Policy( PolicyName = Sub("S3Access-${AWS::StackName}")
                , PolicyDocument = policyDoc
                )
-
+  
 def get_secret_manager() -> Policy:
   statements = [
     awacs.aws.Statement(

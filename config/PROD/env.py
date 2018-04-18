@@ -1,3 +1,3 @@
 def get_env() -> dict:
-  return {}
+  return { "bucket" : "iotweatherdata-prod" }
 

@@ -5,7 +5,23 @@ from awslambdacontinuousdelivery.tools.iam import (
 
 from troposphere import Sub
 from troposphere.iam import Role, Policy
+from awacs.dynamodb import PutItem
 import awacs.aws
+import awacs.s3 as s3
+
+def get_s3_access() -> Policy:
+  statements = [
+    awacs.aws.Statement(
+      Action = [ s3.PutObject ],
+      Effect = awacs.aws.Allow,
+      Resource = [ "arn:aws:s3:::iotweatherdata-prod/*" ]
+    )
+  ]
+  policyDoc = awacs.aws.Policy( Statement = statements )
+  return Policy( PolicyName = Sub("S3Access-${AWS::StackName}")
+               , PolicyDocument = policyDoc
+               )
+
 
 def get_secret_manager() -> Policy:
   statements = [
@@ -25,7 +41,7 @@ def get_iam(ref_name: str) -> Role:
   return Role( ref_name
              , RoleName = ref_name
              , AssumeRolePolicyDocument = assume
-             , Policies = [oneClickCreateLogsPolicy(), get_secret_manager()]
+             , Policies = [ oneClickCreateLogsPolicy(), get_secret_manager(), get_s3_access() ]
              )
 
 if __name__ == "__main__":
@@ -34,3 +50,4 @@ if __name__ == "__main__":
   print(str(secret.to_dict()))
   role = get_iam("Test")
   print(str(role.to_dict()))
+

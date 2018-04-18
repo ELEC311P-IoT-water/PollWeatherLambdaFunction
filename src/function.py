@@ -60,26 +60,25 @@ def makeReq( url: str
            ) -> Response:
     logger.debug("url: {}".format(url))
     headers = {"Accept: application/json"}
-    req_url = "/".join([ url
-                       , "v2.0"
-                       , "history"
-                       , "daily"
-                       ])
     yesterday = get_yesterday()
     today = get_today()
-    payload = { "lat": lat, "lon": lon,
-                start_date = yesterday, end_date = today, key: apikey }
-    return requests.get(req_url, params = payload)
+    payload = { "lat": lat
+              , "lon": lon
+              , "start_date": yesterday
+              , "end_date": today
+              , "key": apikey }
+    return requests.get( "https://api.weatherbit.io/v2.0/history/daily"
+                       , params = payload
+                       )
 
 def putS3(bucket: str, key: str, data: str) -> dict:
     s3 = boto3.resource("s3")
     obj = s3.Object(bucket, key)
+    data = json.dumps(data)
     return obj.put(Body = data)
 
-def weather_to_s3(weather: str) -> dict:
-    bucket = os.environ["bucket"]
-    key = get_yesterday()
-    return putS3(bucket, key, weather)
+def get_bucket() -> dict:
+    return os.environ["bucket"]
 
 def lambda_handler(event, context):
     lat = event["lat"]
@@ -87,7 +86,9 @@ def lambda_handler(event, context):
     secret_manager_content = convertToDict(get_apikey())
     apikey = secret_manager_content["WeatherbitApikey"]
     logger.debug("lat: {0}, lon: {1}, key: {2}".format(lat, lon, apikey))
-    resp = makeReq("http://api.weatherbit.io", apikey, lat, lon)
+    resp = makeReq(apikey, lat, lon)
     if resp.status_code == 200:
-        resp = weather_to_s3(resp.json())
+        bucket = get_bucket()
+        key = get_yesterday()
+        resp = putS3(bucket, key, resp.json())
     return resp
