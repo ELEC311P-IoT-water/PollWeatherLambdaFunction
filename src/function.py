@@ -57,7 +57,6 @@ def makeReq( apikey: str
            , lat: str
            , lon: str
            ) -> Response:
-    logger.debug("url: {}".format(url))
     headers = {"Accept: application/json"}
     yesterday = get_yesterday()
     today = get_today()
