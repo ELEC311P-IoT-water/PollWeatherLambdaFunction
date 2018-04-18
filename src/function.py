@@ -53,8 +53,7 @@ def get_apikey() -> str:
 def convertToDict(string: str) -> dict:
     return json.loads(string)
 
-def makeReq( url: str
-           , apikey: str
+def makeReq( apikey: str
            , lat: str
            , lon: str
            ) -> Response:
