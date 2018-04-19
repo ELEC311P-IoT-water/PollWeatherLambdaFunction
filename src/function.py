@@ -69,11 +69,15 @@ def makeReq( apikey: str
                        , params = payload
                        )
 
-def putS3(bucket: str, key: str, data: str) -> dict:
+def putS3(bucket: str, key: str, data: str, readers: List[str]) -> dict:
     s3 = boto3.resource("s3")
     obj = s3.Object(bucket, key)
     data = json.dumps(data)
-    return obj.put(Body = data)
+    readers = map(lambda x: "id=" + x, readers)
+    readers = ",".join(readers)
+    return obj.put( Body = data
+                  , GrantRead = readers
+                  )
 
 def get_bucket() -> dict:
     return os.environ["bucket"]
@@ -81,6 +85,7 @@ def get_bucket() -> dict:
 def lambda_handler(event, context):
     lat = event["lat"]
     lon = event["lon"]
+    read_access = event["read_access_ids"]
     secret_manager_content = convertToDict(get_apikey())
     apikey = secret_manager_content["WeatherbitApikey"]
     logger.debug("lat: {0}, lon: {1}, key: {2}".format(lat, lon, apikey))
