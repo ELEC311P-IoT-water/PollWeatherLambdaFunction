@@ -93,5 +93,5 @@ def lambda_handler(event, context):
     if resp.status_code == 200:
         bucket = get_bucket()
         key = get_yesterday()
-        resp = putS3(bucket, key, resp.json())
+        resp = putS3(bucket, key, resp.json(), read_access)
     return resp
