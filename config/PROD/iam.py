@@ -12,7 +12,7 @@ import awacs.s3 as s3
 def get_s3_access() -> Policy:
   statements = [
     awacs.aws.Statement(
-      Action = [ s3.PutObject, PutObjectAcl ],
+      Action = [ s3.PutObject, s3.PutObjectAcl ],
       Effect = awacs.aws.Allow,
       Resource = [ "arn:aws:s3:::iotweatherdata-prod/*" ]
     )
